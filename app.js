@@ -29,12 +29,10 @@ app.get('*', (req, res) => {
 });
 
 const PORT = process.env.PORT || 5000;
-const name = process.env.MONGODB_USERNAME || "";
 const password = process.env.MONGODB_PASSWORD || "";
-const cluster = process.env.MONGODB_CLUSTER || "";
 const db = process.env.MONGODB_DATABASE || "";
 
-const MONGO_URI = `mongodb+srv://${name}:${password}@${cluster}.iwu8p.mongodb.net/${db}?retryWrites=true&w=majority`;
+const MONGO_URI = `mongodb+srv://todo-list:${password}@todo.iwu8p.mongodb.net/${db}?retryWrites=true&w=majority`;
 
 mongoose
   .connect(
