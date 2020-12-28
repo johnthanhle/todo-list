@@ -12,6 +12,7 @@ import ListItemText from '@material-ui/core/ListItemText';
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import IconButton from '@material-ui/core/IconButton';
 import Checkbox from '@material-ui/core/Checkbox';
+import Edit from '@material-ui/core/Edit';
 import DeleteForeverRoundedIcon from '@material-ui/icons/DeleteForeverRounded';
 
 import Dialog from '@material-ui/core/Dialog';
@@ -54,6 +55,16 @@ const DELETE_TODO = gql`
   }
 `;
 
+const EDIT_TODO = gql`
+  mutation EditTodo($todoID: ID!, $task: String!) {
+    editTodo(todoId: $todoId, task: $task) {
+      _id
+      task
+      isCompleted
+    }
+  }
+`;
+
 export default function App() {
   const [open, setOpen] = useState(false);
 
@@ -88,6 +99,8 @@ export default function App() {
     },
   });
 
+  const [editTodo] = useMutation(EDIT_TODO);
+  
   function handleClickOpen() {
     setOpen(true);
   }
