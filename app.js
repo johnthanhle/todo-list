@@ -29,10 +29,10 @@ app.get('*', (req, res) => {
 });
 
 const PORT = process.env.PORT || 5000;
-const password = 'johnle' || '';
-const db = 'todo' || '';
+const password = process.env.MONGODB_PASSWORD || '';
+const db = process.env.MONGODB_DATABASE || '';
 
-const MONGO_URI = `mongodb+srv://todo-list:${password}@todo.iwu8p.mongodb.net/${db}?retryWrites=true&w=majority`;
+const MONGO_URI = `mongodb+srv://todo-list:${password}@todo-list.iwu8p.mongodb.net/${db}?retryWrites=true&w=majority`;
 
 mongoose
   .connect(
