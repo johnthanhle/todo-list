@@ -6,6 +6,7 @@ const rootResolver = {
       const todos = await Todo.find().sort({created:-1});
       return todos;
     } catch (err) {
+      console.log(err);
       throw err;
     }
   },
@@ -19,6 +20,7 @@ const rootResolver = {
       const result = await todo.save();
       return result;
     } catch (err) {
+      console.log(err);
       throw err;
     }
   },
