@@ -29,8 +29,12 @@ app.get('*', (req, res) => {
 });
 
 const PORT = process.env.PORT || 5000;
+const name = process.env.MONGODB_USERNAME || "";
+const password = process.env.MONGODB_PASSWORD || "";
+const cluster = process.env.MONGODB_CLUSTER || "";
+const db = process.env.MONGODB_DATABASE || "";
 
-const MONGO_URI = `mongodb+srv://${process.env.MONGODB_USERNAME}:${process.env.MONGODB_PASSWORD}@${process.env.MONGODB_CLUSTER}.mongodb.net/${process.env.MONGODB_DATABASE}?retryWrites=true&w=majority`;
+const MONGO_URI = `mongodb+srv://${name}:${password}@${cluster}.iwu8p.mongodb.net/${db}?retryWrites=true&w=majority`;
 
 mongoose
   .connect(
