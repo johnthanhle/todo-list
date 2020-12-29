@@ -13,12 +13,14 @@ import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import IconButton from '@material-ui/core/IconButton';
 import Checkbox from '@material-ui/core/Checkbox';
 import Edit from '@material-ui/icons/Edit';
+import Check from '@material-ui/icons/Check';
 import DeleteForeverRoundedIcon from '@material-ui/icons/DeleteForeverRounded';
 import { withStyles } from "@material-ui/core/styles";
 
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogTitle from '@material-ui/core/DialogTitle';
+
 
 const CSSTextField = withStyles({
   root: {
@@ -64,9 +66,8 @@ const DELETE_TODO = gql`
   }
 `;
 
-// In progress
 const EDIT_TODO = gql`
-  mutation EditTodo($todoID: ID!, $task: String!) {
+  mutation EditTodo($todoId: ID!, $task: String!) {
     editTodo(todoId: $todoId, task: $task) {
       _id
       task
@@ -76,11 +77,19 @@ const EDIT_TODO = gql`
 `;
 
 export default function App() {
+  const [isEdit, setIsEdit] = useState(false);
+
+  const [ID, setID] = useState(-1);
+  
   const [open, setOpen] = useState(false);
 
   const [todoToBeDeleted, setTodoToBeDeleted] = useState('');
 
   const [inputs, setInputs] = useState({
+    task: '',
+  });
+
+  const [editInput, setEditInput] = useState({
     task: '',
   });
 
@@ -109,7 +118,6 @@ export default function App() {
     },
   });
 
-  // In progress
   const [editTodo] = useMutation(EDIT_TODO);
 
   function handleClickOpen() {
@@ -129,6 +137,12 @@ export default function App() {
   };
 
   const handleAddTodo = (event) => {
+    if (inputs.task === '' || inputs.task === null || inputs.task.trim().length <= 0) {
+      setInputs((inputs) => ({
+        task: '',
+      }));
+      return;
+    }
     event.preventDefault();
     addTodo({variables: {task: inputs.task}});
     setInputs((inputs) => ({
@@ -145,9 +159,30 @@ export default function App() {
     setOpen(false);
   };
 
-  // In progress
-  const handleEditTodo = (_id, editArg) => () => {
-    completeTodo({variables: {todoId: _id, task: editArg}});
+  const handleEditTodo = (_id, task) => () => {
+    editTodo({variables: {todoId: _id, task: task}});
+    setEditInput({
+      task: '',
+    });
+  };
+
+  const save = (_id, task) => () => {
+    setIsEdit(false);
+    setID(-1);
+    if (task.trim().length <= 0 || task === null || task === '') {
+      setEditInput({
+        task: '',
+      });
+      return;
+    }
+    handleEditTodo(_id, task)();
+  };
+
+  const handleEditInput = (event) => {
+    event.persist();
+    setEditInput((inputs) => ({
+      [event.target.id]: event.target.value,
+    }));
   };
 
   if (loading) return <div>Loading...</div>;
@@ -191,7 +226,7 @@ export default function App() {
           variant='contained'
           color='primary'
           fullWidth
-          disabled={inputs.task ? false : true}
+          disabled={(inputs.task && inputs.task.trim().length > 0) ? false : true}
         >
           Submit
         </Button>
@@ -199,34 +234,65 @@ export default function App() {
 
       <List>
         {data.todos.map(({_id, task, isCompleted}) => {
-          return (
-            <ListItem
-              key={_id}
-              role={undefined}
-              button
-              divider
-              onClick={handleCompleteTodo(_id, isCompleted)}
-            >
-              <ListItemIcon>
-                <Checkbox checked={isCompleted} />
-              </ListItemIcon>
-              <ListItemText
-                id={_id}
-                primary={task}
-                style={{textDecoration: isCompleted ? 'line-through' : 'none'}}
-              />
-              <ListItemSecondaryAction
-                onClick={() => {
-                  setTodoToBeDeleted(_id);
-                  handleClickOpen();
-                }}
+          if (isEdit && _id == ID && _id != -1) {
+            return (
+              <ListItem
+                key={_id}
+                role={undefined}
+                button
+                divider
               >
-                <IconButton edge='end'>
-                  <DeleteForeverRoundedIcon />
-                </IconButton>
-              </ListItemSecondaryAction>
-            </ListItem>
-          );
+                <CSSTextField
+                id='task'
+                value={editInput.task}
+                margin='normal'
+                fullWidth
+                variant='outlined'
+                onChange={handleEditInput}
+                multiline={true}
+                onBlur={save(_id, editInput.task)}
+                />
+                <Check onClick={save(_id, editInput.task)} />
+              </ListItem>
+            );
+          } else {
+              return (<ListItem
+                key={_id}
+                role={undefined}
+                button
+                divider
+                onClick={handleCompleteTodo(_id, isCompleted)}
+              >
+                <ListItemIcon>
+                  <Checkbox checked={isCompleted} />
+                </ListItemIcon>
+                <ListItemText
+                  id={_id}
+                  primary={task}
+                  style={{textDecoration: isCompleted ? 'line-through' : 'none'}}
+                />
+                <ListItemSecondaryAction>
+                  <IconButton edge='end'
+                  onClick={() => {
+                    setIsEdit(true);
+                    setID(_id);
+                    setEditInput({
+                      task: '',
+                    });
+                  }}
+                  >
+                    <Edit />
+                  </IconButton>
+                  <IconButton edge='end'
+                  onClick={() => {
+                    setTodoToBeDeleted(_id);
+                    handleClickOpen();
+                  }}>
+                    <DeleteForeverRoundedIcon />
+                  </IconButton>
+                </ListItemSecondaryAction>
+              </ListItem>);
+            }
         })}
       </List>
     </Container>

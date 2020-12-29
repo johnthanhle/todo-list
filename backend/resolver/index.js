@@ -52,6 +52,25 @@ const rootResolver = {
       console.log(error);
     }
   },
+  editTodo: async (args, request) => {
+    try {
+      const result = await Todo.findOneAndUpdate(
+        {_id: args.todoId},
+        {
+          $set: {
+            task: args.task,
+            updated: new Date()
+          },
+        },
+        {
+          new: true,
+        },
+      );
+      return result;
+    } catch (error) {
+      console.log(error);
+    }
+  },
 };
 
 module.exports = rootResolver;

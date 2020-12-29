@@ -15,6 +15,7 @@ module.exports = graphql.buildSchema(`
     addTodo(task: String!): Todo
     completeTodo(todoId: ID!, isCompleted: Boolean): Todo
     deleteTodo(todoId: ID!): String
+    editTodo(todoId: ID!, task: String!): Todo
   }
   schema {
     query: RootQuery
