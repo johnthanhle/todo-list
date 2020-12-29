@@ -14,11 +14,19 @@ import IconButton from '@material-ui/core/IconButton';
 import Checkbox from '@material-ui/core/Checkbox';
 import Edit from '@material-ui/icons/Edit';
 import DeleteForeverRoundedIcon from '@material-ui/icons/DeleteForeverRounded';
+import { withStyles } from "@material-ui/core/styles";
 
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogTitle from '@material-ui/core/DialogTitle';
 
+const CSSTextField = withStyles({
+  root: {
+    '& .MuiInputBase-root': {
+      color: 'white',
+    },
+  },
+})(TextField);
 
 const GET_TODOS = gql`
   {
@@ -168,15 +176,15 @@ export default function App() {
       </Dialog>
 
       <form onSubmit={handleAddTodo} autocomplete="off">
-        <TextField
+        <CSSTextField
           id='task'
           value={inputs.task}
           label='+ Add Task'
           margin='normal'
           fullWidth
           variant='outlined'
-          InputProps={{color: 'secondary'}}
           onChange={handleInputs}
+          multiline={true}
         />
         <Button
           type='submit'
