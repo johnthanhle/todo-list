@@ -1,3 +1,3 @@
 # todo-list
-Simple Todo List app  <br>
+Simple Todo List App  <br>
 Hosted at https://todo-list-jle.herokuapp.com/
