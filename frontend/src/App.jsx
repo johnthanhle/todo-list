@@ -277,7 +277,7 @@ export default function App() {
                     setIsEdit(true);
                     setID(_id);
                     setEditInput({
-                      task: '',
+                      task: task,
                     });
                   }}
                   >
