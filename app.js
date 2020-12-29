@@ -1,6 +1,7 @@
 const cookieParser = require('cookie-parser');
 const logger = require('morgan');
 const depthLimit = require('graphql-depth-limit');
+const rateLimit = require("express-rate-limit");
 
 if (process.env.NODE_ENV !== 'production') {
   require('dotenv').config();
@@ -16,6 +17,13 @@ const graphqlResolver = require('./backend/resolver/index');
 
 const app = express();
 
+const apiLimiter = rateLimit({
+  windowMs: 1 * 60 * 1000, // 1 minute
+  max: 30
+});
+ 
+app.use("/api", apiLimiter);
+app.set('trust proxy', 1);
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(logger('dev'));
