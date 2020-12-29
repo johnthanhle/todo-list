@@ -5,15 +5,18 @@ import {ApolloProvider} from '@apollo/react-hooks';
 import ApolloClient from 'apollo-boost';
 import './index.css';
 import reportWebVitals from './reportWebVitals';
+import HttpsRedirect from 'react-https-redirect';
 
 const client = new ApolloClient({
   uri: '/api',
 });
 
 ReactDOM.render(
-  <ApolloProvider client={client}>
-    <App />
-  </ApolloProvider>,
+  <HttpsRedirect>
+    <ApolloProvider client={client}>
+      <App />
+    </ApolloProvider>
+  </HttpsRedirect>,
   document.getElementById('root'),
 );
 
