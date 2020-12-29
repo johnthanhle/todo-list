@@ -19,6 +19,7 @@ import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogTitle from '@material-ui/core/DialogTitle';
 
+
 const GET_TODOS = gql`
   {
     todos {
@@ -166,7 +167,7 @@ export default function App() {
         </DialogActions>
       </Dialog>
 
-      <form onSubmit={handleAddTodo}>
+      <form onSubmit={handleAddTodo} autocomplete="off">
         <TextField
           id='task'
           value={inputs.task}
@@ -174,6 +175,7 @@ export default function App() {
           margin='normal'
           fullWidth
           variant='outlined'
+          InputProps={{color: 'secondary'}}
           onChange={handleInputs}
         />
         <Button
