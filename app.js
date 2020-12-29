@@ -1,7 +1,6 @@
 const cookieParser = require('cookie-parser');
-const indexRouter = require('./routes/index');
-const usersRouter = require('./routes/users');
 const logger = require('morgan');
+const depthLimit = require('graphql-depth-limit');
 
 if (process.env.NODE_ENV !== 'production') {
   require('dotenv').config();
@@ -17,17 +16,18 @@ const graphqlResolver = require('./backend/resolver/index');
 
 const app = express();
 
-app.use(logger('dev'));
-app.use('/', indexRouter);
-app.use('/users', usersRouter);
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
+app.use(logger('dev'));
 app.use(express.json());
 app.use(cors());
 app.use(express.static(path.join(__dirname, 'frontend/build')));
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'jade');
 
+const DepthLimitRule = depthLimit(
+  4,
+  { ignore: [ 'whatever', 'trusted' ] },
+  depths => console.log(depths)
+)
 
 app.use(
   '/api',
@@ -35,6 +35,9 @@ app.use(
     schema: graphqlSchema,
     rootValue: graphqlResolver,
     graphiql: true,
+    validationRules: [
+      DepthLimitRule,
+    ],
   }),
 ); 
 
