@@ -1,4 +1,7 @@
-var cookieParser = require('cookie-parser');
+const cookieParser = require('cookie-parser');
+const indexRouter = require('./routes/index');
+const usersRouter = require('./routes/users');
+const logger = require('morgan');
 
 if (process.env.NODE_ENV !== 'production') {
   require('dotenv').config();
@@ -14,11 +17,16 @@ const graphqlResolver = require('./backend/resolver/index');
 
 const app = express();
 
+app.use(logger('dev'));
+app.use('/', indexRouter);
+app.use('/users', usersRouter);
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.json());
 app.use(cors());
 app.use(express.static(path.join(__dirname, 'frontend/build')));
+app.set('views', path.join(__dirname, 'views'));
+app.set('view engine', 'jade');
 
 
 app.use(
@@ -35,8 +43,8 @@ app.get('*', (req, res) => {
 });
 
 const PORT = process.env.PORT || 5000;
-const password = process.env.MONGODB_PASSWORD || "johnle";
-const db = process.env.MONGODB_DATABASE || "todo";
+const password = process.env.MONGODB_PASSWORD;
+const db = process.env.MONGODB_DATABASE;
 
 const MONGO_URI = `mongodb+srv://todo-list:${password}@todo-list.iwu8p.mongodb.net/${db}?retryWrites=true&w=majority`;
 
