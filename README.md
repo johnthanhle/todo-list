@@ -3,6 +3,6 @@ A simple Todo List web application made using GraphQL and MERN stack. Features i
 ## Incoming Features
 User Authenthication <br>
 Personalized Todo Lists <br>
-Updates/Edits in real time 
+Real-time Collaborative Editing
 ## Check it out!
 It is hosted at https://todo-list-jle.herokuapp.com/
