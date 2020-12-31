@@ -7,6 +7,6 @@ Personalized Todo Lists <br>
 Real-time Collaborative Editing
 ## Check it out!
 It is hosted at https://todo-list-jle.herokuapp.com/
-<br>
+<br><br>
 Mobile Version <br>
 ![Screenshot](iOS.png)
