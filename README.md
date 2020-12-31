@@ -8,4 +8,4 @@ Real-time Collaborative Editing
 ## Check it out!
 It is hosted at https://todo-list-jle.herokuapp.com/
 ## Mobile Version <br>
-![Screenshot](iOS.png)
+<img src="iOS.png" width="200">
