@@ -8,6 +8,7 @@ import {
 } from "react-native";
 import Bar from "./Bar";
 import TodoList from "./TodoList";
+import Icon from "react-native-vector-icons/MaterialIcons";
 
 export default function App() {
   const [title, setTitle] = useState("");
@@ -17,7 +18,7 @@ export default function App() {
 
   // function to add todo object in todo list
   const addTodo = () => {
-    if (title.length > 0) {
+    if (title.trim().length > 0) {
       // Add todo to the list
       setTodos([...todos, { key: Date.now(), name: title, isChecked: false }]);
       // clear the value of the textfield
@@ -39,10 +40,20 @@ export default function App() {
     );
   };
 
-  // function to delete todo from the todo list
+  const editTodo = (id, name) => {
+    if (name !== undefined && name.trim().length > 0 ) {
+        setTodos(
+          todos.map(todo => {
+            if (todo.key === id) {
+              todo.name = name;
+            }
+            return todo;
+          })
+      );
+    }
+  };
+
   const deleteTodo = id => {
-    // loop through todo list and return todos that don't match the id
-    // update the state using setTodos function
     setTodos(todos.filter(todo => {
       return todo.key !== id;
     }));
@@ -50,7 +61,6 @@ export default function App() {
 
   useEffect(() => {
     console.log(todos.length, "TodoList length");
-    //console.log(todos);
   }, [todos]);
 
   return (
@@ -59,14 +69,13 @@ export default function App() {
       <Bar />
       <View style={styles.todo}>
         <TextInput
-          placeholder="Add a todo"
+          placeholder="Add a task!"
           value={title}
           onChangeText={value => setTitle(value)}
           style={styles.textbox}
         />
-        <Button title="Add" color="#7F39FB" onPress={() => addTodo()} />
+        <Icon name="add" size={25} color="#0072c1" onPress={() => addTodo()} />
       </View>
-
       <ScrollView>
         {todos.map(todo => (
           <TodoList
@@ -74,6 +83,7 @@ export default function App() {
             todo={todo}
             checkTodo={checkTodo}
             deleteTodo={deleteTodo}
+            editTodo={editTodo}
           />
         ))}
       </ScrollView>
@@ -83,7 +93,7 @@ export default function App() {
 
 const styles = StyleSheet.create({
   statusBar: {
-    backgroundColor: "#7F39FB",
+    backgroundColor: "#0072c1",
     color: "#fff",
     width: "100%",
     height: 30
@@ -102,7 +112,7 @@ const styles = StyleSheet.create({
   },
   textbox: {
     borderWidth: 1,
-    borderColor: "#7F39FB",
+    borderColor: "#0072c1",
     borderRadius: 8,
     padding: 10,
     margin: 10,
