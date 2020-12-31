@@ -3,7 +3,6 @@ import {
   StyleSheet,
   TextInput,
   View,
-  Button,
   ScrollView
 } from "react-native";
 import Bar from "./Bar";
@@ -20,16 +19,13 @@ export default function App() {
   const addTodo = () => {
     if (title.trim().length > 0) {
       // Add todo to the list
-      setTodos([...todos, { key: Date.now(), name: title, isChecked: false }]);
+      setTodos([...todos, { key: Date.now(), name: title, isChecked: false, isEdit: false}]);
       // clear the value of the textfield
       setTitle("");
     }
   };
 
-  // function to mark todo as checked or unchecked
   const checkTodo = id => {
-    // loop through todo list and look for the the todo that matches the given id param
-    // update the state using setTodos function
     setTodos(
       todos.map(todo => {
         if (todo.key === id) {
@@ -46,11 +42,23 @@ export default function App() {
           todos.map(todo => {
             if (todo.key === id) {
               todo.name = name;
+              todo.isEdit = false; 
             }
             return todo;
           })
       );
     }
+  };
+
+  const editCheck = id => {
+    setTodos(
+      todos.map(todo => {
+        if (todo.key === id) {
+          todo.isEdit = true;
+        }
+        return todo;
+      })
+    );
   };
 
   const deleteTodo = id => {
@@ -73,6 +81,7 @@ export default function App() {
           value={title}
           onChangeText={value => setTitle(value)}
           style={styles.textbox}
+          multiline={true}
         />
         <Icon name="add" size={25} color="#0072c1" onPress={() => addTodo()} />
       </View>
@@ -84,6 +93,7 @@ export default function App() {
             checkTodo={checkTodo}
             deleteTodo={deleteTodo}
             editTodo={editTodo}
+            editCheck={editCheck}
           />
         ))}
       </ScrollView>
