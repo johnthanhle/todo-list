@@ -12,15 +12,11 @@ import Icon from "react-native-vector-icons/MaterialIcons";
 export default function App() {
   const [title, setTitle] = useState("");
 
-  // Initalize empty array to store todos
   const [todos, setTodos] = useState([]);
 
-  // function to add todo object in todo list
   const addTodo = () => {
     if (title.trim().length > 0) {
-      // Add todo to the list
       setTodos([...todos, { key: Date.now(), name: title, isChecked: false, isEdit: false}]);
-      // clear the value of the textfield
       setTitle("");
     }
   };
@@ -68,7 +64,7 @@ export default function App() {
   };
 
   useEffect(() => {
-    console.log(todos.length, "TodoList length");
+    console.log("TodoList length:", todos.length);
   }, [todos]);
 
   return (
