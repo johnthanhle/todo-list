@@ -16,6 +16,7 @@ import Edit from '@material-ui/icons/Edit';
 import Check from '@material-ui/icons/Check';
 import DeleteForeverRoundedIcon from '@material-ui/icons/DeleteForeverRounded';
 import { withStyles } from "@material-ui/core/styles";
+import Typography from '@material-ui/core/Typography'
 
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
@@ -267,8 +268,9 @@ export default function App() {
                   <Checkbox checked={isCompleted} />
                 </ListItemIcon>
                 <ListItemText
+                  disabledTypography 
                   id={_id}
-                  primary={task}
+                  primary={<Typography variant="font">{task}</Typography>}
                   style={{textDecoration: isCompleted ? 'line-through' : 'none'}}
                 />
                 <ListItemSecondaryAction>
